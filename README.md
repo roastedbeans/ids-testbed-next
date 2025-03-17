@@ -18,6 +18,14 @@ A comprehensive security research implementation that simulates the MyData ecosy
    git clone <repository-url>
    ```
 
+   a. after cloning the project, clone the subprojects by following the command below:
+
+   ```bash
+   git clone https://github.com/roastedbeans/certification-authority-next.git
+   git clone https://github.com/roastedbeans/information-provider-next.git
+   git clone https://github.com/roastedbeans/mydata-operator-next.git
+   ```
+
 2. Create an `.env` file based on `.env.example`:
 
    ```bash
