@@ -8,15 +8,16 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=${CA_DATABASE_URL}
-      - DIRECT_URL=${CA_DIRECT_URL}
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres.djwfwgeikjfvyyksbqcz:WC35wleDddoBj7lJ@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true
+      - DIRECT_URL=postgresql://postgres.djwfwgeikjfvyyksbqcz:WC35wleDddoBj7lJ@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres
       - JWT_SECRET=${JWT_SECRET}
       - CA_CODE=${CA_CODE}
       - CA_PRIVATE_KEY=${CA_PRIVATE_KEY}
       - CA_PUBLIC_KEY=${CA_PUBLIC_KEY}
     volumes:
       - ./certification-authority-next/logs:/app/logs
+      - ./.env:/app/.env
     restart: unless-stopped
 
   information-provider:
@@ -26,12 +27,19 @@ services:
     ports:
       - '4000:4000'
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=${IP_DATABASE_URL}
-      - DIRECT_URL=${IP_DIRECT_URL}
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres.djwfwgeikjfvyyksbqcz:WC35wleDddoBj7lJ@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true
+      - DIRECT_URL=postgresql://postgres.djwfwgeikjfvyyksbqcz:WC35wleDddoBj7lJ@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres
       - JWT_SECRET=${JWT_SECRET}
+      - ANYA_BANK_API=${ANYA_BANK_API}
+      - ANYA_CLIENT_ID=${ANYA_CLIENT_ID}
+      - ANYA_CLIENT_SECRET=${ANYA_CLIENT_SECRET}
+      - BOND_BANK_API=${BOND_BANK_API}
+      - BOND_ORG_CODE=${BOND_ORG_CODE}
+      - BOND_ORG_SERIAL_CODE=${BOND_ORG_SERIAL_CODE}
     volumes:
       - ./information-provider-next/logs:/app/logs
+      - ./.env:/app/.env
     restart: unless-stopped
     depends_on:
       - certification-authority
@@ -43,12 +51,19 @@ services:
     ports:
       - '4200:4200'
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=${MO_DATABASE_URL}
-      - DIRECT_URL=${MO_DIRECT_URL}
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres.djwfwgeikjfvyyksbqcz:WC35wleDddoBj7lJ@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true
+      - DIRECT_URL=postgresql://postgres.djwfwgeikjfvyyksbqcz:WC35wleDddoBj7lJ@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres
       - JWT_SECRET=${JWT_SECRET}
+      - ANYA_BANK_API=${ANYA_BANK_API}
+      - ANYA_CLIENT_ID=${ANYA_CLIENT_ID}
+      - ANYA_CLIENT_SECRET=${ANYA_CLIENT_SECRET}
+      - BOND_BANK_API=${BOND_BANK_API}
+      - BOND_ORG_CODE=${BOND_ORG_CODE}
+      - BOND_ORG_SERIAL_CODE=${BOND_ORG_SERIAL_CODE}
     volumes:
       - ./mydata-operator-next/logs:/app/logs
+      - ./.env:/app/.env
     restart: unless-stopped
     depends_on:
       - certification-authority
