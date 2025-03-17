@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  certification-authority:
+    build:
+      context: ./certification-authority-next
+      dockerfile: ../Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${CA_DATABASE_URL}
+      - DIRECT_URL=${CA_DIRECT_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - CA_CODE=${CA_CODE}
+      - CA_PRIVATE_KEY=${CA_PRIVATE_KEY}
+      - CA_PUBLIC_KEY=${CA_PUBLIC_KEY}
+    volumes:
+      - ./certification-authority-next/logs:/app/logs
+    restart: unless-stopped
+
+  information-provider:
+    build:
+      context: ./information-provider-next
+      dockerfile: ../Dockerfile
+    ports:
+      - '4000:4000'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${IP_DATABASE_URL}
+      - DIRECT_URL=${IP_DIRECT_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./information-provider-next/logs:/app/logs
+    restart: unless-stopped
+    depends_on:
+      - certification-authority
+
+  mydata-operator:
+    build:
+      context: ./mydata-operator-next
+      dockerfile: ../Dockerfile
+    ports:
+      - '4200:4200'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${MO_DATABASE_URL}
+      - DIRECT_URL=${MO_DIRECT_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./mydata-operator-next/logs:/app/logs
+    restart: unless-stopped
+    depends_on:
+      - certification-authority
+      - information-provider
