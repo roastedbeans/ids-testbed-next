@@ -20,15 +20,19 @@ RUN npm run build
 FROM base AS runner
 ENV NODE_ENV production
 
+# Create an empty public directory before switching to non-root user
+RUN mkdir -p ./public && chmod 755 ./public
+
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+# Ensure the nextjs user owns the public directory
+RUN chown -R nextjs:nodejs ./public
 USER nextjs
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 CMD ["npm", "start"] 
