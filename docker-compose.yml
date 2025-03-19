@@ -15,6 +15,30 @@ services:
       - CA_CODE=${CA_CODE}
       - CA_PRIVATE_KEY=${CA_PRIVATE_KEY}
       - CA_PUBLIC_KEY=${CA_PUBLIC_KEY}
+      - ANYA_BANK_API=${ANYA_BANK_API}
+      - BOND_BANK_API=${BOND_BANK_API}
+      - ANYA_CLIENT_ID=${ANYA_CLIENT_ID}
+      - BOND_CLIENT_ID=${BOND_CLIENT_ID}
+      - ANYA_CLIENT_SECRET=${ANYA_CLIENT_SECRET}
+      - BOND_CLIENT_SECRET=${BOND_CLIENT_SECRET}
+      - BOND_ORG_CODE=${BOND_ORG_CODE}
+      - ANYA_ORG_CODE=${ANYA_ORG_CODE}
+      - BOND_ORG_SERIAL_CODE=${BOND_ORG_SERIAL_CODE}
+      - ANYA_ORG_SERIAL_CODE=${ANYA_ORG_SERIAL_CODE}
+      - NEXT_PUBLIC_ANYA_BANK_API=${NEXT_PUBLIC_ANYA_BANK_API}
+      - NEXT_PUBLIC_ANYA_ORG_CODE=${NEXT_PUBLIC_ANYA_ORG_CODE}
+      - NEXT_PUBLIC_ANYA_ORG_SERIAL_CODE=${NEXT_PUBLIC_ANYA_ORG_SERIAL_CODE}
+      - NEXT_PUBLIC_ANYA_CLIENT_ID=${NEXT_PUBLIC_ANYA_CLIENT_ID}
+      - NEXT_PUBLIC_ANYA_CLIENT_SECRET=${NEXT_PUBLIC_ANYA_CLIENT_SECRET}
+      - NEXT_PUBLIC_BOND_BANK_API=${NEXT_PUBLIC_BOND_BANK_API}
+      - NEXT_PUBLIC_BOND_ORG_CODE=${NEXT_PUBLIC_BOND_ORG_CODE}
+      - NEXT_PUBLIC_BOND_ORG_SERIAL_CODE=${NEXT_PUBLIC_BOND_ORG_SERIAL_CODE}
+      - NEXT_PUBLIC_BOND_CLIENT_ID=${NEXT_PUBLIC_BOND_CLIENT_ID}
+      - NEXT_PUBLIC_BOND_CLIENT_SECRET=${NEXT_PUBLIC_BOND_CLIENT_SECRET}
+      - NEXT_PUBLIC_CA_CODE=${NEXT_PUBLIC_CA_CODE}
+      - NEXT_PUBLIC_CA_PRIVATE_KEY=${NEXT_PUBLIC_CA_PRIVATE_KEY}
+      - NEXT_PUBLIC_CA_PUBLIC_KEY=${NEXT_PUBLIC_CA_PUBLIC_KEY}
+
     volumes:
       - ./certification-authority-next/logs:/app/logs
       - ./.env:/app/.env
@@ -42,8 +66,10 @@ services:
       - ./.env:/app/.env
     restart: unless-stopped
     depends_on:
-      - certification-authority
-
+      certification-authority:
+        condition: service_started
+      mydata-operator:
+        condition: service_started
   mydata-operator:
     build:
       context: ./mydata-operator-next
@@ -66,5 +92,7 @@ services:
       - ./.env:/app/.env
     restart: unless-stopped
     depends_on:
-      - certification-authority
-      - information-provider
+      certification-authority:
+        condition: service_started
+      information-provider:
+        condition: service_started
