@@ -1,0 +1,9 @@
+[submodule "certification-authority-next"]
+	path = certification-authority-next
+	url = https://github.com/roastedbeans/certification-authority-next.git
+[submodule "information-provider-next"]
+	path = information-provider-next
+	url = https://github.com/roastedbeans/information-provider-next.git
+[submodule "mydata-operator-next"]
+	path = mydata-operator-next
+	url = https://github.com/roastedbeans/mydata-operator-next.git
